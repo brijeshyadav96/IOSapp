@@ -1,0 +1,53 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Description of what the lane does"
+  lane :custom_lane do
+    # add actions here: https://docs.fastlane.tools/actions
+  end
+
+  desc "To release the app to store"
+  lane :release_app do
+    build_app
+    upload_app
+  end
+
+  desc "To build our app"
+  lane :build_app do
+    gym(
+      project: "IosApp.xcodeproj",
+      scheme: "IosApp",
+      clean: true,
+      export_xcargs: "-allowProvisioningUpdates",
+      output_name: "App.ipa"
+    )
+  end
+
+  desc "To deliver the app to store"
+  lane :upload_app do
+    deliver(
+      ipa: "App.ipa",
+      skip_screenshots: true,
+      skip_metadata: true,
+      skip_app_version_update: true,
+      force: true
+    )
+  end
+
+
+end
